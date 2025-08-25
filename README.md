@@ -1,53 +1,121 @@
-# Sistema de Gestión de Tareas Kanban - TEKAI
+# TEKAI Kanban System
 
-## 📋 Descripción
-
-Sistema de gestión de tareas estilo Kanban desarrollado como prueba técnica para TEKAI. Incluye una aplicación frontend moderna en React, una API backend robusta en Node.js/TypeScript, y está preparado para integración con n8n y AI Agent.
-
-## 🏗️ Arquitectura
-
-```
-tekai/
-├── backend/          # API REST con Node.js + TypeScript + Express
-├── frontend/         # Aplicación React + TypeScript + Tailwind CSS
-└── README.md         # Documentación principal
-```
+Un sistema de gestión de tareas tipo Kanban con integración de chat n8n, desarrollado con tecnologías modernas y diseño profesional.
 
 ## 🚀 Características
 
-### Frontend
-- ✅ Tablero Kanban interactivo con drag & drop
-- ✅ Columnas: Creada, En progreso, Bloqueada, Finalizada, Cancelada
-- ✅ Crear, editar y eliminar tareas
-- ✅ Mover tareas entre columnas
-- ✅ Mostrar fecha de creación y responsable
-- ✅ Lista de responsables seleccionable
-- ✅ **Diseño profesional y minimalista** con paleta de colores moderna
-- ✅ **Sistema de diseño consistente** con variables CSS
-- ✅ **Animaciones suaves** y transiciones elegantes
-- ✅ **Indicadores visuales de estado** para cada tipo de tarea
-- ✅ Interfaz moderna y responsive
-- ✅ Notificaciones toast
-- ✅ Validación de formularios
-
-### Backend
-- ✅ API REST con endpoints completos
-- ✅ Arquitectura limpia (Controllers, Services, Repositories)
-- ✅ Base de datos SQLite
-- ✅ Validaciones de negocio
-- ✅ Manejo de errores
-- ✅ Pruebas unitarias
-- ✅ CORS configurado
-- ✅ Logging de requests
+- **Tablero Kanban Interactivo**: Drag & drop para mover tareas entre columnas
+- **Chat Integrado n8n**: Asistente inteligente con diseño personalizado
+- **Interfaz Moderna**: Diseño profesional con gradientes azules y efectos visuales
+- **Soporte Bilingüe**: Español e Inglés
+- **Funcionalidad Click-Outside**: Cierre de modales y chat al hacer clic fuera
+- **Containerización Docker**: Fácil despliegue y desarrollo
+- **Base de Datos PostgreSQL**: Almacenamiento robusto y escalable
+- **API TypeScript**: Backend moderno con Express
+- **Frontend React**: Interfaz de usuario reactiva y moderna
 
 ## 🛠️ Tecnologías
 
+### Frontend
+- React 18 con TypeScript
+- Vite para desarrollo rápido
+- CSS moderno con variables y gradientes
+- Drag & Drop nativo
+- Integración n8n chat
+
 ### Backend
-- **Node.js** con **TypeScript**
-- **Express.js** para el servidor web
-- **SQLite** para persistencia de datos
-- **Jest** para pruebas unitarias
-- **CORS** para comunicación cross-origin
+- Node.js con TypeScript
+- Express.js
+- PostgreSQL
+- Docker & Docker Compose
+
+### Herramientas de Desarrollo
+- ESLint y Prettier
+- Vitest para testing
+- Hot reload en desarrollo
+
+## 📋 Requisitos Previos
+
+- Docker y Docker Compose
+- Node.js 18+ (para desarrollo local)
+- Git
+
+## 🚀 Instalación y Configuración
+
+### 1. Clonar el Repositorio
+
+```bash
+git clone https://github.com/cedioza/tekai-kanban.git
+cd tekai-kanban
+```
+
+### 2. Configurar Variables de Entorno
+
+Copia los archivos de ejemplo y configura tus credenciales:
+
+```bash
+# Para desarrollo local
+cp .env.example .env
+
+# Para Docker
+cp .env.docker.example .env.docker
+```
+
+Edita los archivos `.env` y `.env.docker` con tus configuraciones:
+
+```env
+# .env
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=tekai_db
+DB_USER=tu_usuario
+DB_PASSWORD=tu_password
+PORT=3001
+
+# .env.docker
+POSTGRES_DB=tekai_db
+POSTGRES_USER=tu_usuario
+POSTGRES_PASSWORD=tu_password
+```
+
+### 3. Ejecutar con Docker (Recomendado)
+
+```bash
+# Construir y ejecutar todos los servicios
+docker-compose up -d
+
+# Ver logs
+docker-compose logs -f
+
+# Parar servicios
+docker-compose down
+```
+
+### 4. Desarrollo Local (Opcional)
+
+```bash
+# Instalar dependencias del backend
+cd backend
+npm install
+
+# Instalar dependencias del frontend
+cd ../frontend
+npm install
+
+# Ejecutar backend (en una terminal)
+cd backend
+npm run dev
+
+# Ejecutar frontend (en otra terminal)
+cd frontend
+npm run dev
+```
+
+## 🌐 Acceso a la Aplicación
+
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:3001
+- **Base de Datos**: localhost:5432
 
 ### Frontend
 - **React 18** con **TypeScript**
