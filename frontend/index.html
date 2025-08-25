@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kanban TEKAI - Sistema de Gestión de Tareas</title>
+    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+    <style>
+      /* Personalización del chat de n8n para TEKAI */
+      :root {
+        /* Colores principales del chat */
+        --chat--color-primary: #3b82f6 !important;           /* azul base */
+        --chat--color-primary-shade-50: #2563eb !important;  /* hover */
+        --chat--color-primary-shade-100: #1d4ed8 !important; /* active */
+        
+        /* Mensajes de usuario */
+        --chat--color-secondary: #3b82f6 !important;
+        --chat--color-secondary-shade-50: #2563eb !important;
+        
+        /* Colores adicionales */
+        --chat--color-white: #ffffff !important;
+        --chat--color-light: #f8fafc !important;
+        --chat--color-dark: #1e293b !important;
+        
+        /* Configuración del botón flotante */
+        --chat--toggle--background: #3b82f6 !important;
+        --chat--toggle--hover--background: #2563eb !important;
+        --chat--toggle--active--background: #1d4ed8 !important;
+        --chat--toggle--color: #ffffff !important;
+        
+        /* Ventana del chat */
+        --chat--window--border-radius: 16px !important;
+        --chat--window--box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+      }
+      
+      /* Header del chat con degradado */
+      .n8n-chat .n8n-chat-header {
+        background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%) !important;
+        color: white !important;
+        border-radius: 16px 16px 0 0 !important;
+        padding: 1rem !important;
+      }
+      
+      /* Título personalizado del chat */
+      .n8n-chat .n8n-chat-header h1,
+      .n8n-chat .n8n-chat-header .n8n-chat-title {
+        color: white !important;
+        font-weight: 600 !important;
+        font-size: 1.125rem !important;
+      }
+      
+      /* Subtítulo del chat */
+      .n8n-chat .n8n-chat-header p,
+      .n8n-chat .n8n-chat-header .n8n-chat-subtitle {
+        color: rgba(255, 255, 255, 0.9) !important;
+        font-size: 0.875rem !important;
+        margin-top: 0.25rem !important;
+      }
+      
+      /* Botón flotante mejorado */
+      .n8n-chat .n8n-chat-toggle {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        border: none !important;
+      }
+      
+      .n8n-chat .n8n-chat-toggle:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%) !important;
+        transform: translateY(-2px) scale(1.05) !important;
+        box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4) !important;
+      }
+      
+      /* Mensajes del usuario */
+      .n8n-chat .n8n-chat-message.user {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+        color: white !important;
+        border-radius: 18px 18px 4px 18px !important;
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2) !important;
+      }
+      
+      /* Mensajes del bot */
+      .n8n-chat .n8n-chat-message.bot {
+        background: #f8fafc !important;
+        color: #1e293b !important;
+        border-radius: 18px 18px 18px 4px !important;
+        border: 1px solid #e2e8f0 !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+      }
+      
+      /* Input del chat */
+      .n8n-chat .n8n-chat-input {
+        border: 2px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        transition: all 0.2s ease !important;
+      }
+      
+      .n8n-chat .n8n-chat-input:focus {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+      }
+      
+      /* Botón de envío */
+      .n8n-chat .n8n-chat-send-button {
+        background: #3b82f6 !important;
+        color: white !important;
+        border-radius: 8px !important;
+        transition: all 0.2s ease !important;
+      }
+      
+      .n8n-chat .n8n-chat-send-button:hover {
+        background: #2563eb !important;
+        transform: scale(1.05) !important;
+      }
+      
+      /* Ventana del chat */
+      .n8n-chat .n8n-chat-window {
+        border-radius: 16px !important;
+        overflow: hidden !important;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+        border: 1px solid rgba(59, 130, 246, 0.1) !important;
+      }
+      
+      /* Animaciones suaves */
+      .n8n-chat * {
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      }
+    </style>
+    <style>
+      /* :root {
+        --chat--color-primary: #e74266;
+        --chat--color-primary-shade-50: #db4061;
+        --chat--color-primary-shade-100: #cf3c5c;
+        --chat--color-secondary: #20b69e;
+        --chat--color-secondary-shade-50: #1ca08a;
+        --chat--color-white: #ffffff;
+        --chat--color-light: #f2f4f8;
+        --chat--color-light-shade-50: #e6e9f1;
+        --chat--color-light-shade-100: #c2c5cc;
+        --chat--color-medium: #d2d4d9;
+        --chat--color-dark: #101330;
+        --chat--color-disabled: #777980;
+        --chat--color-typing: #404040;
+
+        --chat--spacing: 1rem;
+        --chat--border-radius: 0.25rem;
+        --chat--transition-duration: 0.15s;
+
+        --chat--window--width: 400px;
+        --chat--window--height: 600px;
+
+        --chat--header-height: auto;
+        --chat--header--padding: var(--chat--spacing);
+        --chat--header--background: var(--chat--color-dark);
+        --chat--header--color: var(--chat--color-light);
+        --chat--header--border-top: none;
+        --chat--header--border-bottom: none;
+        --chat--heading--font-size: 2em;
+        --chat--subtitle--font-size: inherit;
+        --chat--subtitle--line-height: 1.8;
+
+        --chat--textarea--height: 50px;
+
+        --chat--message--font-size: 1rem;
+        --chat--message--padding: var(--chat--spacing);
+        --chat--message--border-radius: var(--chat--border-radius);
+        --chat--message-line-height: 1.8;
+        --chat--message--bot--background: var(--chat--color-white);
+        --chat--message--bot--color: var(--chat--color-dark);
+        --chat--message--bot--border: none;
+        --chat--message--user--background: var(--chat--color-secondary);
+        --chat--message--user--color: var(--chat--color-white);
+        --chat--message--user--border: none;
+        --chat--message--pre--background: rgba(0, 0, 0, 0.05);
+
+        --chat--toggle--background: var(--chat--color-primary);
+        --chat--toggle--hover--background: var(--chat--color-primary-shade-50);
+        --chat--toggle--active--background: var(--chat--color-primary-shade-100);
+        --chat--toggle--color: var(--chat--color-white);
+        --chat--toggle--size: 64px;
+      } */
+
+      /* Estilos base para el chat */
+      
+
+      
+      /* Overlay del modal */
+      /* .chat-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(8px);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      .chat-modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      } */
+      
+      /* Modal del chat */
+      /* .chat-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.8);
+        width: 90%;
+        max-width: 450px;
+        height: 80vh;
+        max-height: 700px;
+        background: white;
+        border-radius: 24px;
+        box-shadow: 
+          0 32px 64px rgba(0, 0, 0, 0.2),
+          0 16px 32px rgba(0, 0, 0, 0.15),
+          0 8px 16px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        border: 2px solid rgba(102, 126, 234, 0.1);
+      }
+      
+      .chat-modal.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, -50%) scale(1);
+      } */
+      
+      /* Botón de cerrar */
+      /* .chat-close-button {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1001;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      }
+      
+      .chat-close-button:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: scale(1.1);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+      }
+      
+      .close-icon {
+        width: 20px;
+        height: 20px;
+        stroke: #64748b;
+        stroke-width: 2;
+      } */
+      
+
+      
+      /* Contenido del modal */
+      /* .chat-modal-content {
+        width: 100%;
+        height: 100%;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #64748b;
+      }
+      
+      .chat-modal-content h2 {
+        margin: 0 0 16px 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #334155;
+      }
+      
+      .chat-modal-content p {
+        margin: 0;
+        font-size: 1rem;
+        opacity: 0.8;
+      } */
+      
+      /* Botones del chat mejorados */
+      /* .chat-modal .chat-button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 12px 24px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+      }
+      
+      .chat-modal .chat-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+      } */
+      
+      /* Animaciones */
+      /* @keyframes slideInUp {
+        from {
+          transform: translate(-50%, -50%) scale(0.8) translateY(40px);
+          opacity: 0;
+        }
+        to {
+          transform: translate(-50%, -50%) scale(1) translateY(0);
+          opacity: 1;
+        }
+      }
+      
+      @keyframes pulse {
+        0%, 100% {
+          box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3), 0 4px 16px rgba(102, 126, 234, 0.2);
+        }
+        50% {
+          box-shadow: 0 12px 48px rgba(102, 126, 234, 0.4), 0 6px 24px rgba(102, 126, 234, 0.3);
+        }
+      }
+      
+      .chat-menu-button {
+        animation: pulse 3s infinite;
+      } */
+      
+      /* Responsive */
+      /* @media (max-width: 768px) {
+        .chat-modal {
+          width: 95%;
+          height: 85vh;
+          border-radius: 16px;
+        }
+        
+        .chat-menu-button {
+          width: 55px;
+          height: 55px;
+          top: 15px;
+          right: 15px;
+        }
+        
+        .chat-icon {
+          width: 24px;
+          height: 24px;
+        }
+      } */
+
+
+
+
+
+
+
+
+
+
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <script type="module">
+        import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+        
+        // Inicializar el chat de n8n con configuración completa
+      createChat({
+        webhookUrl: 'http://localhost:5678/webhook/dbb04720-bfbd-4469-8a9f-8455d9aa8c37/chat',
+        webhookConfig: {
+          method: 'POST',
+          headers: {}
+        },
+        target: '#n8n-chat',
+        mode: 'window',
+        chatInputKey: 'chatInput',
+        chatSessionKey: 'sessionId',
+        loadPreviousSession: true,
+        metadata: {
+          source: 'tekai-kanban',
+          version: '1.0.0'
+        },
+        showWelcomeScreen: false,
+        defaultLanguage: 'es',
+        initialMessages: [
+          '¡Hola! 👋',
+          'Soy el Asistente TEKAI. ¿Cómo puedo ayudarte con tus tareas y proyectos hoy?'
+        ],
+        i18n: {
+          es: {
+            title: '¡Hola! 👋',
+            subtitle: 'Inicia una conversación. Estamos aquí para ayudarte 24/7.',
+            footer: 'Powered by TEKAI',
+            getStarted: 'Nueva Conversación',
+            inputPlaceholder: 'Escribe tu pregunta aquí...'
+          },
+          en: {
+            title: 'Hi there! 👋',
+            subtitle: "Start a chat. We're here to help you 24/7.",
+            footer: 'Powered by TEKAI',
+            getStarted: 'New Conversation',
+            inputPlaceholder: 'Type your question here...'
+          }
+        },
+        enableStreaming: false,
+        theme: {
+          primaryColor: '#3b82f6',
+          fontFamily: 'Inter, system-ui, sans-serif'
+        }
+      });
+      
+      // Agregar funcionalidad para cerrar chat al hacer click fuera
+      document.addEventListener('click', function(event) {
+        const chatWidget = document.querySelector('.n8n-chat');
+        const chatWindow = document.querySelector('.n8n-chat-window');
+        const chatToggle = document.querySelector('.n8n-chat-toggle');
+        
+        if (chatWidget && chatWindow && chatToggle) {
+          const isClickInsideChat = chatWidget.contains(event.target);
+          const isClickOnToggle = chatToggle.contains(event.target);
+          const isChatOpen = chatWindow.style.display !== 'none' && 
+                           !chatWindow.classList.contains('hidden') &&
+                           chatWindow.offsetParent !== null;
+          
+          if (!isClickInsideChat && !isClickOnToggle && isChatOpen) {
+            // Simular click en el botón de toggle para cerrar el chat
+            chatToggle.click();
+          }
+        }
+      });
+    </script>
+    
+
+
+    <!-- Overlay del modal
+    <div class="chat-modal-overlay" id="chatModalOverlay"></div>
+
+    Modal del chat
+    <div class="chat-modal" id="chatModal">
+      Botón de cerrar
+      <button class="chat-close-button" id="chatCloseButton">
+        <svg class="close-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      
+      Contenido del modal
+      <div class="chat-modal-content">
+        <h2>💬 Chat</h2>
+        <p>Contenido del chat aquí</p>
+      </div>
+    </div> -->
+
+
+  </body>
+</html>
