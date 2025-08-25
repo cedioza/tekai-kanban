@@ -1,0 +1,430 @@
+/**
+ * Estilos del Chat n8n - TEKAI
+ * 
+ * Este archivo contiene todos los estilos personalizados para el chat n8n
+ * integrado en el sistema TEKAI, siguiendo el sistema de diseño establecido.
+ */
+
+/* ==========================================================================
+   VARIABLES ESPECÍFICAS DEL CHAT
+   ========================================================================== */
+
+:root {
+  /* Dimensiones del chat */
+  --chat-width: 400px;
+  --chat-height: 600px;
+  --chat-toggle-size: 64px;
+  
+  /* Colores específicos del chat */
+  --chat-header-bg: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-primary-700) 100%);
+  --chat-toggle-bg: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-primary-700) 100%);
+  --chat-toggle-hover-bg: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-primary-800) 100%);
+  
+  /* Sombras específicas del chat */
+  --chat-toggle-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+  --chat-toggle-hover-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
+  --chat-window-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* ==========================================================================
+   ESTILOS PRINCIPALES DEL CHAT N8N
+   ========================================================================== */
+
+/* Contenedor principal del chat */
+.n8n-chat {
+  font-family: var(--font-family-primary) !important;
+  --chat--color-primary: var(--color-primary) !important;
+  --chat--color-secondary: var(--color-primary-light) !important;
+}
+
+/* Header del chat con gradiente azul */
+.n8n-chat .n8n-chat-header {
+  background: var(--chat-header-bg) !important;
+  color: var(--color-white) !important;
+  padding: var(--spacing-4) !important;
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0 !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Título del chat */
+.n8n-chat .n8n-chat-header h1,
+.n8n-chat .n8n-chat-header .n8n-chat-title {
+  color: var(--color-white) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  font-size: var(--font-size-lg) !important;
+  margin: 0 !important;
+}
+
+/* Subtítulo del chat */
+.n8n-chat .n8n-chat-header p,
+.n8n-chat .n8n-chat-header .n8n-chat-subtitle {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: var(--font-size-sm) !important;
+  margin-top: var(--spacing-1) !important;
+  margin-bottom: 0 !important;
+}
+
+/* ==========================================================================
+   BOTÓN FLOTANTE DEL CHAT
+   ========================================================================== */
+
+/* Botón flotante mejorado */
+.n8n-chat .n8n-chat-toggle {
+  background: var(--chat-toggle-bg) !important;
+  box-shadow: var(--chat-toggle-shadow) !important;
+  transition: all var(--duration-300) var(--ease-in-out) !important;
+  border: none !important;
+  width: var(--chat-toggle-size) !important;
+  height: var(--chat-toggle-size) !important;
+  border-radius: var(--radius-full) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--color-white) !important;
+  font-size: var(--font-size-xl) !important;
+}
+
+.n8n-chat .n8n-chat-toggle:hover {
+  background: var(--chat-toggle-hover-bg) !important;
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow: var(--chat-toggle-hover-shadow) !important;
+}
+
+.n8n-chat .n8n-chat-toggle:active {
+  transform: translateY(-1px) scale(1.02) !important;
+}
+
+/* ==========================================================================
+   MENSAJES DEL CHAT
+   ========================================================================== */
+
+/* Contenedor de mensajes */
+.n8n-chat .n8n-chat-messages {
+  padding: var(--spacing-4) !important;
+  background: var(--color-background) !important;
+}
+
+/* Mensajes del usuario */
+.n8n-chat .n8n-chat-message.user,
+.n8n-chat .n8n-chat-message[data-sender="user"] {
+  background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-primary-600) 100%) !important;
+  color: var(--color-white) !important;
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-lg) !important;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2) !important;
+  padding: var(--spacing-3) var(--spacing-4) !important;
+  margin: var(--spacing-2) 0 !important;
+  max-width: 80% !important;
+  margin-left: auto !important;
+  font-size: var(--font-size-sm) !important;
+  line-height: var(--line-height-relaxed) !important;
+}
+
+/* Mensajes del bot */
+.n8n-chat .n8n-chat-message.bot,
+.n8n-chat .n8n-chat-message[data-sender="bot"] {
+  background: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) var(--radius-sm) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  padding: var(--spacing-3) var(--spacing-4) !important;
+  margin: var(--spacing-2) 0 !important;
+  max-width: 80% !important;
+  margin-right: auto !important;
+  font-size: var(--font-size-sm) !important;
+  line-height: var(--line-height-relaxed) !important;
+}
+
+/* ==========================================================================
+   ÁREA DE INPUT DEL CHAT
+   ========================================================================== */
+
+/* Contenedor del input */
+.n8n-chat .n8n-chat-input-container {
+  padding: var(--spacing-4) !important;
+  background: var(--color-surface) !important;
+  border-top: 1px solid var(--color-border) !important;
+  border-radius: 0 0 var(--radius-2xl) var(--radius-2xl) !important;
+}
+
+/* Input del chat */
+.n8n-chat .n8n-chat-input,
+.n8n-chat textarea {
+  border: 2px solid var(--color-border) !important;
+  border-radius: var(--radius-xl) !important;
+  transition: var(--transition-colors) !important;
+  padding: var(--spacing-3) var(--spacing-4) !important;
+  font-family: var(--font-family-primary) !important;
+  font-size: var(--font-size-sm) !important;
+  line-height: var(--line-height-normal) !important;
+  background: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+  resize: none !important;
+  outline: none !important;
+}
+
+.n8n-chat .n8n-chat-input:focus,
+.n8n-chat textarea:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.n8n-chat .n8n-chat-input::placeholder,
+.n8n-chat textarea::placeholder {
+  color: var(--color-text-muted) !important;
+}
+
+/* ==========================================================================
+   BOTÓN DE ENVÍO
+   ========================================================================== */
+
+/* Botón de envío */
+.n8n-chat .n8n-chat-send-button,
+.n8n-chat button[type="submit"] {
+  background: var(--color-primary) !important;
+  color: var(--color-white) !important;
+  border-radius: var(--radius-lg) !important;
+  transition: var(--transition-all) !important;
+  border: none !important;
+  padding: var(--spacing-2) var(--spacing-4) !important;
+  font-weight: var(--font-weight-medium) !important;
+  font-size: var(--font-size-sm) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 80px !important;
+}
+
+.n8n-chat .n8n-chat-send-button:hover,
+.n8n-chat button[type="submit"]:hover {
+  background: var(--color-primary-dark) !important;
+  transform: scale(1.05) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.n8n-chat .n8n-chat-send-button:active,
+.n8n-chat button[type="submit"]:active {
+  transform: scale(1.02) !important;
+}
+
+.n8n-chat .n8n-chat-send-button:disabled,
+.n8n-chat button[type="submit"]:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* ==========================================================================
+   VENTANA DEL CHAT
+   ========================================================================== */
+
+/* Ventana principal del chat */
+.n8n-chat .n8n-chat-window,
+.n8n-chat .n8n-chat-widget {
+  border-radius: var(--radius-2xl) !important;
+  overflow: hidden !important;
+  box-shadow: var(--chat-window-shadow) !important;
+  border: 1px solid rgba(59, 130, 246, 0.1) !important;
+  background: var(--color-surface) !important;
+  width: var(--chat-width) !important;
+  max-width: 90vw !important;
+  height: var(--chat-height) !important;
+  max-height: 80vh !important;
+}
+
+/* ==========================================================================
+   ESTADOS DE CARGA Y TYPING
+   ========================================================================== */
+
+/* Indicador de typing */
+.n8n-chat .n8n-chat-typing {
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) var(--radius-sm) !important;
+  padding: var(--spacing-3) var(--spacing-4) !important;
+  margin: var(--spacing-2) 0 !important;
+  max-width: 80% !important;
+  margin-right: auto !important;
+  color: var(--color-text-secondary) !important;
+  font-style: italic !important;
+}
+
+/* Spinner de carga */
+.n8n-chat .n8n-chat-loading {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: var(--spacing-4) !important;
+  color: var(--color-text-muted) !important;
+}
+
+/* ==========================================================================
+   SCROLLBAR PERSONALIZADA
+   ========================================================================== */
+
+/* Scrollbar para el área de mensajes */
+.n8n-chat .n8n-chat-messages::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+.n8n-chat .n8n-chat-messages::-webkit-scrollbar-track {
+  background: var(--color-gray-100) !important;
+  border-radius: var(--radius-full) !important;
+}
+
+.n8n-chat .n8n-chat-messages::-webkit-scrollbar-thumb {
+  background: var(--color-gray-300) !important;
+  border-radius: var(--radius-full) !important;
+}
+
+.n8n-chat .n8n-chat-messages::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-400) !important;
+}
+
+/* ==========================================================================
+   ANIMACIONES Y TRANSICIONES
+   ========================================================================== */
+
+/* Animaciones suaves para todos los elementos del chat */
+.n8n-chat * {
+  transition: all var(--duration-200) var(--ease-in-out) !important;
+}
+
+/* Animación de entrada para mensajes */
+.n8n-chat .n8n-chat-message {
+  animation: slideInMessage var(--duration-300) var(--ease-out) !important;
+}
+
+@keyframes slideInMessage {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animación de entrada para la ventana del chat */
+.n8n-chat .n8n-chat-window {
+  animation: slideInChat var(--duration-300) var(--ease-out) !important;
+}
+
+@keyframes slideInChat {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+
+/* Tablets */
+@media (max-width: 768px) {
+  .n8n-chat .n8n-chat-window,
+  .n8n-chat .n8n-chat-widget {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    height: 85vh !important;
+    max-height: 85vh !important;
+  }
+  
+  .n8n-chat .n8n-chat-toggle {
+    width: 56px !important;
+    height: 56px !important;
+    font-size: var(--font-size-lg) !important;
+  }
+}
+
+/* Móviles */
+@media (max-width: 480px) {
+  .n8n-chat .n8n-chat-window,
+  .n8n-chat .n8n-chat-widget {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+  
+  .n8n-chat .n8n-chat-header {
+    border-radius: 0 !important;
+    padding-top: calc(var(--spacing-4) + env(safe-area-inset-top)) !important;
+  }
+  
+  .n8n-chat .n8n-chat-input-container {
+    border-radius: 0 !important;
+    padding-bottom: calc(var(--spacing-4) + env(safe-area-inset-bottom)) !important;
+  }
+  
+  .n8n-chat .n8n-chat-toggle {
+    width: 50px !important;
+    height: 50px !important;
+    font-size: var(--font-size-base) !important;
+  }
+}
+
+/* ==========================================================================
+   MODO OSCURO (preparado para futuras implementaciones)
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  .n8n-chat .n8n-chat-messages {
+    background: var(--color-gray-900) !important;
+  }
+  
+  .n8n-chat .n8n-chat-message.bot,
+  .n8n-chat .n8n-chat-message[data-sender="bot"] {
+    background: var(--color-gray-800) !important;
+    color: var(--color-gray-100) !important;
+    border-color: var(--color-gray-700) !important;
+  }
+  
+  .n8n-chat .n8n-chat-input,
+  .n8n-chat textarea {
+    background: var(--color-gray-800) !important;
+    color: var(--color-gray-100) !important;
+    border-color: var(--color-gray-700) !important;
+  }
+  
+  .n8n-chat .n8n-chat-input-container {
+    background: var(--color-gray-800) !important;
+    border-color: var(--color-gray-700) !important;
+  }
+}
+
+/* ==========================================================================
+   UTILIDADES Y OVERRIDES ESPECÍFICOS
+   ========================================================================== */
+
+/* Asegurar que el chat tenga la máxima prioridad en z-index */
+.n8n-chat {
+  z-index: var(--z-index-chat) !important;
+}
+
+/* Ocultar elementos no deseados */
+.n8n-chat .n8n-chat-powered-by {
+  display: none !important;
+}
+
+/* Mejorar la accesibilidad */
+.n8n-chat button:focus-visible {
+  outline: 2px solid var(--color-primary) !important;
+  outline-offset: 2px !important;
+}
+
+.n8n-chat input:focus-visible,
+.n8n-chat textarea:focus-visible {
+  outline: 2px solid var(--color-primary) !important;
+  outline-offset: 2px !important;
+}
