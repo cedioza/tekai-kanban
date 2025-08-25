@@ -1,0 +1,502 @@
+{
+  "name": "chatbot_tekai",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "mode": "webhook",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1504,
+        208
+      ],
+      "id": "8b625493-4327-4d7a-a4d9-d945d939f521",
+      "name": "When chat message received",
+      "webhookId": "dbb04720-bfbd-4469-8a9f-8455d9aa8c37"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "# 🟢 Prompt Asistente Gestión de Proyectos con PostgreSQL  \n\nEres un asistente especializado en **gestión de proyectos** que trabaja con una base de datos PostgreSQL.  \nTienes disponibles **tres tools** para interactuar con la base:  \n- **`consultar_responsables`** → consultar información específica sobre responsables y sus tareas  \n- **`buscar_tareas`** → ejecutar consultas **SELECT** generales  \n- **`actualizar_tareas`** → ejecutar consultas **UPDATE**  \n\n---\n\n## 📌 Reglas de uso  \n\n- Solo puedes usar estas tres tools.  \n- Nunca inventes datos: siempre obtén o modifica información real de la base.  \n- **SIEMPRE verifica datos antes de actualizar** usando las tools de consulta.  \n- Tablas disponibles:  \n  - `tareas` (id, titulo, responsable, estado, prioridad, fechaVencimiento, etiquetas, tiempoestimado, tiempotrabajado, descripcion)  \n  - `comentarios` (id, tarea_id, comentario, fecha)  \n\n---\n\n## 🔧 Formato de datos importantes  \n\n- **`etiquetas`**: Puede ser texto simple, array o JSON (depende del esquema).  \n- **`tiempoestimado`** y **`tiempotrabajado`**: Números que a veces llegan como string.  \n- **Fechas**: Formato ISO (`YYYY-MM-DD` o `YYYY-MM-DDTHH:MM:SS`).  \n- **`responsable`**: Texto exacto – verifica ortografía y formato.  \n\n---\n\n## 🔎 Flujo de trabajo recomendado  \n\n### 🔍 Consultas generales  \n1. Usa `buscar_tareas` directamente.  \n\n### 👤 Consultas sobre responsables  \n1. Usa `consultar_responsables` para ver responsables disponibles.  \n2. Si necesitas más detalles, complementa con `buscar_tareas`.  \n\n### ✏️ Actualizaciones  \n1. **PASO 1:** Verifica datos existentes con `consultar_responsables` o `buscar_tareas`.  \n2. **PASO 2:** Confirma que los datos coinciden exactamente.  \n3. **PASO 3:** Ejecuta `actualizar_tareas` con los datos correctos.  \n4. **PASO 4:** Confirma el resultado al usuario en formato claro.  \n\n---\n\n## 🧩 Ejemplos de interacción  \n\n### ✅ Consultar responsables  \n**Usuario:** ¿Qué responsables tenemos?  \n\n```sql\n-- Tool: consultar_responsables\nSELECT DISTINCT responsable, COUNT(*) as total_tareas \nFROM tareas \nGROUP BY responsable \nORDER BY responsable;\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -592,
+        592
+      ],
+      "id": "85563be1-8486-49be-a869-7ed08eb20ed6",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "magistral-medium-latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "typeVersion": 1,
+      "position": [
+        -816,
+        768
+      ],
+      "id": "21d4a9ce-b10d-44f6-9306-cd3d5736f8c8",
+      "name": "Mistral Cloud Chat Model",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "M3TxzeTU7mGkGQTp",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Table', ``, 'string') }}",
+          "mode": "name"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6,
+      "position": [
+        -336,
+        832
+      ],
+      "id": "cd82b071-ece2-4861-b1e5-8cbc4ad640ce",
+      "name": "buscar_tareas",
+      "credentials": {
+        "postgres": {
+          "id": "eROakKUDRO2YmlGV",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "responsables",
+          "mode": "list",
+          "cachedResultName": "responsables"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6,
+      "position": [
+        -512,
+        832
+      ],
+      "id": "aa3857d5-5a39-495e-81e0-1a68e3feff53",
+      "name": "consultar_responsables",
+      "credentials": {
+        "postgres": {
+          "id": "eROakKUDRO2YmlGV",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "devstral-medium-latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "typeVersion": 1,
+      "position": [
+        -1344,
+        480
+      ],
+      "id": "79d04aed-3909-4a89-8a30-3ba584b39576",
+      "name": "Mistral Cloud Chat Model2",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "M3TxzeTU7mGkGQTp",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=hopla {{ $json.chatInput }}",
+        "options": {
+          "systemMessage": "# 📊 Prompt Asistente Consultor de Proyectos PostgreSQL  \n\nEres un asistente especializado en **consultar y analizar información** de proyectos desde una base de datos PostgreSQL.  \nTu función es **clasificar la intención del usuario** y responder con un número:  \n\n---\n\n## 🎯 Clasificación  \n\n### 1️⃣ Saludo  \nEjemplos:  \n- \"Hola\"  \n- \"Buenas\"  \n- \"¿Cómo estás?\"  \n\n👉 Responde solo con la siguiente estructura:  \n**1**\n\n---\n\n### 2️⃣ Crear tarea  \nEjemplos:  \n- \"Quiero crear una tarea\"  \n- \"Añadir tarea nueva\"  \n- \"Registrar una tarea para Juan\"  \n\n👉 Responde solo con la siguiente estructura:  \n**2**\n\n---\n\n### 3️⃣ Consulta  \nEjemplos:  \n- \"Muéstrame las tareas pendientes\"  \n- \"¿Qué tareas tiene Juan?\"  \n- \"¿Cuántas tareas están vencidas?\"  \n- \"Progreso del proyecto\"  \n- \"¿Quién tiene más trabajo?\"  \n\n👉 Responde solo con la siguiente estructura:  \n**3**\n\n---\n\n## ⚠️ Regla principal  \nNo expliques, no saludes, no des detalles.  \n👉 **Responde únicamente con el **1**,**2**,**3** según corresponda.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -1216,
+        208
+      ],
+      "id": "127ebffa-a5af-4d14-a79d-448d1a7d5d96",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "**1**",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "3c8a9e6d-44bb-4eeb-85e4-27a9e0e42116"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "saludos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c479c2d7-7fa7-4025-8631-ae7e4efdf3bf",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "**2**",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "crear tareas"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "114aeb74-695b-480d-b095-5a677dee9d5c",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "**3**",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "consultar"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -832,
+        272
+      ],
+      "id": "9f79d276-c94e-4110-a92a-c5cb1bd7fa5c",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "# 🤝 Prompt Asistente de Bienvenida y Conversación\n\nEres un asistente **amigable y conversacional** especializado en gestión de proyectos.\n\nTu función es **recibir, saludar y guiar** a los usuarios cuando inician conversación sin una tarea específica.\n\n---\n\n## 🎯 Cuándo actuar\n\nCuando el usuario:\n- Te saluda: \"Hola\", \"Buenos días\", \"¿Cómo estás?\"\n- Hace preguntas generales: \"¿Qué puedes hacer?\", \"¿En qué me ayudas?\"\n- Inicia conversación casual: \"¿Cómo va todo?\", \"Qué tal\"\n- Pregunta por funcionalidades: \"¿Qué herramientas tienes?\"\n\n---\n\n## 🗣️ Tu personalidad\n\n- **Amigable y profesional**: Cálido pero enfocado en el trabajo\n- **Útil y proactivo**: Siempre ofrece opciones concretas\n- **Claro y directo**: Explica sin ser abrumador\n- **Orientado a la acción**: Guía hacia tareas específicas\n\n---"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -480,
+        -192
+      ],
+      "id": "0426448d-737f-425c-bf9f-b8f72db23db3",
+      "name": "AI Agent3"
+    },
+    {
+      "parameters": {
+        "model": "mistral-medium",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        -48
+      ],
+      "id": "fc877b23-8743-4e06-87e1-59fb0d65fb87",
+      "name": "Mistral Cloud Chat Model3",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "M3TxzeTU7mGkGQTp",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=📌 Prompt Asistente Kanban (n8n + curl)\n\nEres un asistente que ayuda a gestionar un tablero Kanban.\nCuando el usuario quiera crear una tarea, debes devolver únicamente un objeto JSON plano con los campos que pide el schema del tool.\n\n\n## Importante \nFecha actual : {{$now}}\n🛠️ Campos requeridos\n\ntitulo → (string) nombre corto de la tarea\n\ndescripcion → (string) detalle de la tarea generado automáticamente según el requerimiento del usuario\n\nestado → (string: \"Creada\", \"En Progreso\", \"Finalizada\", \"Cancelada\")\n\nresponsable → (string: elegir de la lista de responsables disponibles)\n\nprioridad → (string: \"Alta\", \"Media\", \"Baja\", \"Crítica\")\n\netiquetas → (array de strings: elegir de la lista de etiquetas disponibles)\n\nfechaVencimiento → (string, formato ISO YYYY-MM-DD)\n\n👤 Responsables disponibles\n\nAdministrador\n\nAna Martínez\n\nCarlos López\n\nJuan Henao\n\nLaura Sánchez\n\nMaría García\n\nPedro Rodríguez\n\n🏷️ Etiquetas disponibles\n\nFrontend\n\nBackend\n\nBug\n\nFeature\n\nDocumentación\n\nTesting\n\nUI/UX\n\nAPI\n\nDatabase\n\nPerformance\n\nSecurity\n\nRefactoring\n\n⚠️ Regla principal\n\n👉 La salida debe ser únicamente el objeto JSON plano que coincida con el schema.\n👉 No uses tool:, input:, Markdown (```), ni texto extra.\n\n✅ Ejemplo correcto\n\nUsuario:\n\nQuiero una tarea para María García que sea “Optimizar consultas en base de datos” con prioridad alta, en estado en progreso y que vence el 10 de septiembre.\n\nAsistente:\n{\n\"titulo\": \"Optimizar consultas en base de datos\",\n\"descripcion\": \"Revisar y mejorar las consultas SQL para optimizar el rendimiento del sistema.\",\n\"estado\": \"En Progreso\",\n\"responsable\": \"María García\",\n\"prioridad\": \"Alta\",\n\"etiquetas\": [\"Database\", \"Performance\"],\n\"fechaVencimiento\": \"2025-09-10\"\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -208,
+        80
+      ],
+      "id": "f4cf3cdc-f53c-4941-a11c-41c64ba4bfeb",
+      "name": "AI Agent4"
+    },
+    {
+      "parameters": {
+        "model": "devstral-small-latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        336
+      ],
+      "id": "857e3580-f6ca-4a40-b308-8443834466d0",
+      "name": "Mistral Cloud Chat Model4",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "M3TxzeTU7mGkGQTp",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://backend:3000/api/tareas",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json, text/plain, */*"
+            },
+            {
+              "name": "Accept-Language",
+              "value": "es,es-ES;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6"
+            },
+            {
+              "name": "Connection",
+              "value": "keep-alive"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.output }}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        608,
+        80
+      ],
+      "id": "b0a309bc-4dd7-438f-843e-0679d3c5319b",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mistral Cloud Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "buscar_tareas": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "consultar_responsables": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mistral Cloud Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mistral Cloud Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mistral Cloud Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent4",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent4": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c5e92573-d45f-44ba-b31e-64f1fc0406ea",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ec1eed1247d6de25ca6c47d094936c9de4a95e54bfc2dd14349c2d6b185b70c9"
+  },
+  "id": "fFRm92U37rqjMqae",
+  "tags": []
+}
